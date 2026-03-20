@@ -76,6 +76,13 @@ const AI_ENGINE_URL = process.env.AI_ENGINE_URL;
 // ✅ ADD THIS ROUTE
 app.post("/predict", async (req, res) => {
   try {
+    if (!AI_ENGINE_URL) {
+      console.error("AI_ENGINE_URL environment variable is missing!");
+      return res.status(500).json({ error: "AI Engine URL not configured on server." });
+    }
+
+    console.log(`Forwarding prediction request to: ${AI_ENGINE_URL}/predict`);
+    
     const response = await axios.post(
       `${AI_ENGINE_URL}/predict`,
       req.body
@@ -83,8 +90,12 @@ app.post("/predict", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: "AI request failed" });
+    console.error("AI Request Failed:", error.message);
+    res.status(500).json({ 
+      error: "AI request failed", 
+      details: error.message,
+      target: `${AI_ENGINE_URL}/predict`
+    });
   }
 });
 
