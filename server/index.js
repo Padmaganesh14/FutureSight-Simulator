@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 // Set up MongoDB. Skipping connection error check to just let it start.
-mongoose.connect('mongodb://127.0.0.1:27017/financial_simulator')
+mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/financial_simulator')
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log('MongoDB connection error, ensure it is running (will run without DB):', err.message));
 
@@ -30,8 +30,9 @@ app.post('/api/simulate', async (req, res) => {
   try {
     const { amount, frequency, category } = req.body;
     
+    const AI_URL = process.env.AI_ENGINE_URL || 'http://127.0.0.1:5000';
     // Call Python AI Engine
-    const aiResponse = await axios.post('http://127.0.0.1:5000/analyze', {
+    const aiResponse = await axios.post(`${AI_URL}/analyze`, {
       amount: Number(amount),
       frequency,
       category

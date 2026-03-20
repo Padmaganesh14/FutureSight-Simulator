@@ -20,7 +20,8 @@ function App() {
     setLoading(true);
     try {
       // Connects to Node API
-      const res = await axios.post('http://localhost:3000/api/simulate', formData);
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const res = await axios.post(`${API_URL}/api/simulate`, formData);
       setResults(res.data.data.ai_insights);
     } catch (err) {
       console.error(err);
