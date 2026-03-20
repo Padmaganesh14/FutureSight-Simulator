@@ -71,6 +71,27 @@ app.post('/api/simulate', async (req, res) => {
     res.status(500).json({ success: false, error: 'Simulation Engine Unavailable' });
   }
 });
+const AI_ENGINE_URL = process.env.AI_ENGINE_URL;
+
+// ✅ ADD THIS ROUTE
+app.post("/predict", async (req, res) => {
+  try {
+    const response = await axios.post(
+      `${AI_ENGINE_URL}/predict`,
+      req.body
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "AI request failed" });
+  }
+});
+
+// Optional (for testing root)
+app.get("/", (req, res) => {
+  res.send("FutureSight API Running 🚀");
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
