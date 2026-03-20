@@ -17,6 +17,10 @@ app.get("/", (req, res) => {
   res.send("FutureSight API Running 🚀");
 });
 
+app.get("/predict", (req, res) => {
+  res.send("FutureSight /predict endpoint is online. Use POST to send data. 🚀");
+});
+
 // MAIN ROUTE
 app.post("/predict", async (req, res) => {
   try {
