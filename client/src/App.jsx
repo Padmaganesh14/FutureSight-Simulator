@@ -20,12 +20,14 @@ function App() {
     setLoading(true);
     try {
       const API = import.meta.env.VITE_API_URL;
+      const expense = formData.amount;
+
       const response = await fetch(`${API}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ expense })
       });
       const data = await response.json();
       setResults(data);
