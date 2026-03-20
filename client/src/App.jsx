@@ -19,13 +19,19 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Connects to Node API
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-      const res = await axios.post(`${API_URL}/api/simulate`, formData);
-      setResults(res.data.data.ai_insights);
+      const API = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API}/predict`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      setResults(data);
     } catch (err) {
       console.error(err);
-      alert('Error fetching data. Ensure Node backend (port 3000) and Python AI engine (port 5000) are running.');
+      alert("Error connecting to server. Please try again.");
     } finally {
       setLoading(false);
     }
