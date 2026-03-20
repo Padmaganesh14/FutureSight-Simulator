@@ -4,6 +4,10 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({"status": "FutureSight AI Engine is absolutely running perfectly!"})
+
 @app.route('/analyze', methods=['POST'])
 def analyze():
     data = request.json

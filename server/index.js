@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -29,7 +30,7 @@ const Expense = mongoose.model('Expense', expenseSchema);
 app.post('/api/simulate', async (req, res) => {
   try {
     const { amount, frequency, category } = req.body;
-    
+
     const AI_URL = process.env.AI_ENGINE_URL || 'http://127.0.0.1:5000';
     // Call Python AI Engine
     const aiResponse = await axios.post(`${AI_URL}/analyze`, {
@@ -53,7 +54,7 @@ app.post('/api/simulate', async (req, res) => {
       if (mongoose.connection.readyState === 1) {
         await newExpense.save();
       }
-    } catch(err) {
+    } catch (err) {
       console.log('Could not save to DB (perhaps not running), skipping save.');
     }
 
@@ -71,7 +72,7 @@ app.post('/api/simulate', async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Backend Server running on port ${PORT}`);
 });
