@@ -8,6 +8,10 @@ CORS(app)
 def health_check():
     return jsonify({"status": "FutureSight AI Engine is absolutely running perfectly!"})
 
+@app.route('/predict', methods=['GET'])
+def predict_get():
+    return jsonify({"status": "FutureSight /predict endpoint is online. Use POST to send data. 🚀"})
+
 @app.route('/predict', methods=['POST'])
 def predict():
     return analyze()
