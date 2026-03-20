@@ -7,26 +7,33 @@ CORS(app)
 
 @app.route("/", methods=["GET"])
 def health_check():
-    return jsonify({"status": "FutureSight AI Engine is absolutely running perfectly!"})
+    return jsonify({"status": "FutureSight AI Engine is running 🚀"})
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    # Get expense from 'expense' key (as requested) or 'amount' (for frontend compatibility)
-    expense = data.get("expense") or data.get("amount") or 0
-    expense = float(expense)
+        if not data:
+            return jsonify({"error": "No JSON received"}), 400
 
-    # simple logic (as requested)
-    yearly_loss = expense * 365
+        expense = data.get("expense") or data.get("amount") or 0
+        expense = float(expense)
 
-    return jsonify({
-        "future_loss": yearly_loss,
-        "future_loss_10_years": yearly_loss * 10, # Compatibility for frontend
-        "yearly_spend": yearly_loss,              # Compatibility for frontend
-        "suggestions": ["Reduce unnecessary spending"], # Compatibility for frontend
-        "message": "Reduce unnecessary spending"
-    })
+        yearly_loss = expense * 365
+
+        return jsonify({
+            "future_loss": yearly_loss,
+            "future_loss_10_years": yearly_loss * 10,
+            "yearly_spend": yearly_loss,
+            "suggestions": ["Reduce unnecessary spending"],
+            "message": "Reduce unnecessary spending"
+        })
+
+    except Exception as e:
+        print("ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
